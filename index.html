@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <input id="title" type="text" placeholder="title">
+        <br></br>
+        <input id="description" type="text" placeholder="description">
+        <br></br>
+        <button onclick="addTodo()">Add todo</button>
+        <br></br>
+        <div id="container"></div>
+    </div>
+</body>
+<script>
+    let globalId = 1
+    function addTodo() {
+        const title = document.getElementById("title").value
+        const description = document.getElementById("description").value
+        document.getElementById("container").appendChild(createChild(title, description ,globalId++))
+    }
+
+    function createChild(title, description, id) {
+        const maindiv = document.getElementById("container")
+        const childDiv = document.createElement("div")
+        const titlediv = document.createElement("div")
+        const descriptionDiv = document.createElement("div")
+        const button = document.createElement("button")
+        const titleText = document.createTextNode(`${title}`)
+        const descriptionText = document.createTextNode(`${description}`)
+        const buttonText = document.createTextNode("Mark as done")
+        titlediv.appendChild(titleText)
+        descriptionDiv.appendChild(descriptionText)
+        button.appendChild(buttonText)
+        childDiv.appendChild(titlediv)
+        childDiv.appendChild(descriptionDiv)
+        childDiv.appendChild(button)
+        childDiv.setAttribute("id", id)
+        button.setAttribute("onclick", `markAsDone(${id})`)
+        return childDiv
+    }
+    function updateDomAccToState(state) {
+        const mainDiv = document.getElementById("container")
+        mainDiv.innerHTML = ""
+        for (let i = 0; i < state.length; i++) {
+            mainDiv.appendChild(createChild(state[i].title, state[i].description, state[i].id))
+        }
+    }
+    updateDomAccToState([{
+        title: "complete all assignments",
+        description: "of week 4",
+        id: globalId++
+    }, {
+        title: "complete all assignments",
+        description: "of week 4",
+        id: globalId++
+    }])
+    function markAsDone(todoId) {
+        const parentDiv = document.getElementById(todoId)
+        parentDiv.children[2].innerHTML = "Done"
+    }
+    function deleteTodo(parentDiv) {
+        parentDiv.remove()
+    }
+</script>
+
+</html>
